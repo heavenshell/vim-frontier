@@ -7,6 +7,9 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+" Enable open quickfix.
+let g:frontier_enable_quickfix = get(g:, 'frontier_enable_quickfix', 1)
+
 let s:root_path = ''
 let s:commands = {
       \ 'eslint': '',
@@ -46,6 +49,16 @@ function! frontier#cmd(name)
   let s:commands[a:name] = cmd
 
   return cmd
+endfunction
+
+function! frontier#init()
+  if g:frontier_enable_quickfix == 1
+    augroup frontier_enable_quickfix
+      autocmd!
+      autocmd BufWritePost *.js,*.jsx silent! call frontier#eslint#run()
+    augroup END
+  endif
+
 endfunction
 
 let &cpo = s:save_cpo

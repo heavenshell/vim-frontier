@@ -38,9 +38,11 @@ endfunction
 function! s:callback(ch, msg)
   let results = json_decode(a:msg)
   if results[0]['errorCount'] == 0
-    " No Errors. Clear quickfix then close window if exists.
-    call setqflist([], 'r')
-    cclose
+    if len(getqflist()) == 0
+      " No Errors. Clear quickfix then close window if exists.
+      call setqflist([], 'r')
+      cclose
+    endif
     return
   endif
 
@@ -55,6 +57,7 @@ function! s:callback(ch, msg)
 endfunction
 
 function! frontier#eslint#run()
+  redraw | echomsg '[Frontier] Running eslint'
   if exists('s:job') && job_status(s:job) != 'stop'
     call job_stop(s:job)
   endif
