@@ -9,6 +9,7 @@ set cpo&vim
 
 " Enable open quickfix.
 let g:frontier_enable_quickfix = get(g:, 'frontier_enable_quickfix', 1)
+let g:frontier_run_on_save = get(g:, 'frontier_run_on_save', 1)
 
 let s:root_path = ''
 let s:commands = {
@@ -52,7 +53,7 @@ function! frontier#cmd(name)
 endfunction
 
 function! frontier#init()
-  if g:frontier_enable_quickfix == 1
+  if g:frontier_run_on_save == 1
     augroup frontier_enable_quickfix
       autocmd!
       autocmd BufWritePost *.js,*.jsx silent! call frontier#eslint#run()

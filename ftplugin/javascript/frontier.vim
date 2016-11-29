@@ -11,7 +11,7 @@ if !has('channel') || !has('job')
   finish
 endif
 
-command! -buffer FrontierEslint         :call frontier#eslint#run()
+command! -buffer FrontierEslint :call frontier#eslint#run()
 
 noremap <silent> <buffer> <Plug>(FrontierEslint)          :FrontierEslint <CR>
 
