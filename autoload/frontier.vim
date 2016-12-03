@@ -17,6 +17,11 @@ let s:commands = {
       \ 'stylelint': '',
       \ }
 
+let s:rc_files = {
+      \ 'eslint': '',
+      \ 'stylelint': ''
+      \ }
+
 function! frontier#detect_root()
   if s:root_path != ''
     return s:root_path
@@ -39,6 +44,11 @@ function! s:detect_command_path(cmd)
   endif
 
   return bin
+endfunction
+
+function! s:detect_rcfile(name)
+  let root = frontier#detect_root()
+
 endfunction
 
 function! frontier#cmd(name)
