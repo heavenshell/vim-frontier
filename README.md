@@ -103,6 +103,7 @@ augroup js_enable_quickfix
   endfunction
 
   autocmd BufWritePost *.js,*.jsx silent! call s:js_quickfix()
+augroup END
 ```
 
 ## License
