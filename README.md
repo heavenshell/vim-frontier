@@ -9,7 +9,7 @@ My frontend(JavaScript) Vim plugin packs.
 - Stylelint
   - Run with job and channel
 - Mocha
-  - Quickrun plugin
+  - Quickrun plugin(TBD)
 
 ## Features
 

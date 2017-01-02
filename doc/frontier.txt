@@ -1,4 +1,4 @@
-*frontie*	My Vim plguin pack for frontend development.
+*frontier*	My Vim plguin pack for frontend development.
 
 Version: 0.1.0
 Author: Shinya Ohynagi <sohyanagi@gmail.com>
@@ -38,10 +38,91 @@ TUTORIAL						*frontier-tutorial*
 
 Configure:
 
+Run `eslint`, `flow` and open `QuickFix` if error exists.
+>
+  augroup js_enable_quickfix
+    autocmd!
+    function! s:js_quickfix()
+      " Clear QuickFix.
+      call setqflist([], 'r')
+      call frontier#eslint#run('a')
+      " Run realtime check.
+      call flood#check_contents#run('a')
+    endfunction
+
+    function! s:frontier_after(...)
+      if len(getqflist()) > 0
+        cwindow
+      endif
+    endfunction
+
+    autocmd BufWritePost *.js,*.jsx silent! call s:js_quickfix()
+  augroup END
+>
+Run `eslint`, `flow`, update `QuickFixStatus` and `Vim-Hier`.
+>
+  augroup js_enable_quickfix
+    autocmd!
+    function! s:js_quickfix()
+      " Clear QuickFix.
+      call setqflist([], 'r')
+      call frontier#eslint#run('a')
+      " Run realtime check.
+      call flood#check_contents#run('a')
+    endfunction
+
+    function! s:frontier_after(...)
+      execute ':QuickfixStatusEnable'
+      execute ':HierUpdate'
+    endfunction
+
+    let g:frontier_callbacks = {}
+    let g:frontier_callbacks['eslint'] = {
+      \ 'after_run': function('s:frontier_after')
+      \ }
+    let g:flood_callbacks = {}
+    let g:flood_callbacks['check_contents'] = {
+      \ 'after_run': function('s:frontier_after')
+      \ }
+
+    autocmd BufWritePost *.js,*.jsx silent! call s:js_quickfix()
+    autocmd InsertLeave *.js,*.jsx silent! call s:js_quickfix()
+    autocmd TextChanged,TextChangedI *.js,*.jsx silent! call s:js_quickfix()
+  augroup END
+>
+Run `eslint --fix` at save buffer.
+>
+  augroup js_enable_quickfix
+    autocmd!
+    function! s:js_quickfix()
+      " Clear QuickFix.
+      call setqflist([], 'r')
+      " Auto fix.
+      call frontier#eslint#fix()
+
+      " Run realtime check.
+      call flood#check_contents#run('a')
+    endfunction
+
+    autocmd BufWritePost *.js,*.jsx silent! call s:js_quickfix()
+  augroup END
+>
 
 ==============================================================================
 VARIABLES					*frontier-variables*
+g:frontier_enable_quickfix			*g:frontier_enable_quickfix*
 
+		Enable to open QuickFix window automatically
+		Default value is 0(Do not open automatically)
+
+g:frontier_callbacks				*g:frontier_callbacks*
+
+		Hook points. User can inject various functions to frontier.
+
+		before_init	Inject to frontier#init() before called
+		after_init	Inject to frontier#init() after called
+		before_run	Inject to frontier#eslint#run() before called
+		after_run 	Inject to frontier#eslint#run() after called
 
 ==============================================================================
 CHANGELOG						*frontier-changelog*
