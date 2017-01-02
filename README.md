@@ -106,9 +106,9 @@ augroup js_enable_quickfix
 augroup END
 ```
 
-`frontier#eslint#fix()` only support `BufWritePost`.
-
 #### Note
+
+`frontier#eslint#fix()` only support `BufWritePost`.
 
 `eslint --fix` overwrite file. `frontier#eslint#fix()` reload file silently
 after executed.
