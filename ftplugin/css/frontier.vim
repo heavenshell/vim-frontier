@@ -7,7 +7,7 @@ endif
 
 " version check
 if !has('channel') || !has('job')
-  echoerr '+channel and +job are required for flood.vim'
+  echoerr '+channel and +job are required for frontier.vim'
   finish
 endif
 

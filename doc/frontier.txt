@@ -1,0 +1,49 @@
+*frontie*	My Vim plguin pack for frontend development.
+
+Version: 0.1.0
+Author: Shinya Ohynagi <sohyanagi@gmail.com>
+Repository: http://github.com/heavenshell/vim-frontier/
+License: BSD, see LICENSE for more details.
+
+==============================================================================
+CONTENTS						*frontier-contents*
+
+Introduction		|frontier-introduction|
+Install			|frontier-install|
+Tutorial		|frontier-tutorial|
+Variables		|frontier-variables|
+Changelogs		|frontier-changelog|
+
+==============================================================================
+INTRODUCTION						*frontier-introduction*
+
+|frontier| is a wrapper of Eslint, Styleint and Mocha.
+
+- Eslint
+- Stylelint
+- Mocha
+  - Quickrun plugin
+
+==============================================================================
+INSTALL							*frontier-install*
+
+Install the distributed files into Vim runtime directory which is usually
+~/.vim/, or $HOME/vimfiles on Windows.
+
+If you use built in `package`, you should extract the
+file into '~/.vim/pack/*/start' directory.
+
+==============================================================================
+TUTORIAL						*frontier-tutorial*
+
+Configure:
+
+
+==============================================================================
+VARIABLES					*frontier-variables*
+
+
+==============================================================================
+CHANGELOG						*frontier-changelog*
+
+vim:tw=78:ts=8:ft=help:norl:noet:fen:fdl=0:
