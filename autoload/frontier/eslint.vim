@@ -32,26 +32,29 @@ function! s:parse(results)
 endfunction
 
 function! s:callback(ch, msg, mode)
-  let results = json_decode(a:msg)
-  let outputs = s:parse(results)
-  if results[0]['errorCount'] == 0
-    if g:frontier_enable_quickfix == 1 && len(outputs) == 0 && len(getqflist()) == 0
-      " No Errors. Clear quickfix then close window if exists.
-      call setqflist([], 'r')
-      cclose
+  try
+    let results = json_decode(a:msg)
+    let outputs = s:parse(results)
+    if results[0]['errorCount'] == 0
+      if g:frontier_enable_quickfix == 1 && len(outputs) == 0 && len(getqflist()) == 0
+        " No Errors. Clear quickfix then close window if exists.
+        call setqflist([], 'r')
+        cclose
+      endif
+      return
     endif
-    return
-  endif
 
-  " If mode is 'a', add outputs to existing list.
-  call setqflist(outputs, a:mode)
-  if len(outputs) > 0 && g:frontier_enable_quickfix == 1
-    cwindow
-  endif
-
-  if frontier#has_callback('eslint', 'after_run')
-    call g:frontier_callbacks['eslint']['after_run']()
-  endif
+    " If mode is 'a', add outputs to existing list.
+    call setqflist(outputs, a:mode)
+    if len(outputs) > 0 && g:frontier_enable_quickfix == 1
+      cwindow
+    endif
+  catch
+  finally
+    if frontier#has_callback('eslint', 'after_run')
+      call g:frontier_callbacks['eslint']['after_run']()
+    endif
+  endtry
 endfunction
 
 function! s:exit_callback(ch, msg, mode)
@@ -69,10 +72,15 @@ function! frontier#eslint#run(...)
   if exists('s:job') && job_status(s:job) != 'stop'
     call job_stop(s:job)
   endif
+  let bin = frontier#cmd('eslint')
+
+  if bin == ''
+    return
+  endif
 
   let mode = a:0 > 0 ? a:1 : 'r'
   let file = expand('%:p')
-  let cmd = printf('%s --stdin --stdin-filename %s --format json --ext .js,.jsx', frontier#cmd('eslint'), file)
+  let cmd = printf('%s --stdin --stdin-filename %s --format json --ext .js,.jsx', bin, file)
   let s:job = job_start(cmd, {
         \ 'callback': {c, m -> s:callback(c, m, mode)},
         \ 'exit_cb': {c, m -> s:exit_callback(c, m, mode)},
